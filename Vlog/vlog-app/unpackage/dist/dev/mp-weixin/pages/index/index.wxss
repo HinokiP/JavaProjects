@@ -1,23 +1,24 @@
 
-.container {
-	width: 700rpx;
-	padding: 10rpx 10rpx;
-}
-.cards {
-	width: 700rpx;
+.cards.data-v-57280228 {
+	height: 600rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
 	background-color: rgb(153, 158, 207);
 	padding: 20rpx;
 	-webkit-border-radius: 10rpx;
 	        border-radius: 10rpx;
-	margin-bottom: 20rpx;
+	margin: 10rpx 10rpx 20rpx 10rpx;
 }
-.title {
-	font-size: 36rpx;
-}
-.cover {
+.cover.data-v-57280228 {
 	width: 700rpx;
-	height: 300rpx;
+	height: 700px;
 	-webkit-border-radius: 10rpx;
 	        border-radius: 10rpx;
+	margin-bottom: 20rpx;
 }
 
