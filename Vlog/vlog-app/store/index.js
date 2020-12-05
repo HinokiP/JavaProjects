@@ -3,11 +3,28 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-	state: {},
-	getters: {},
-	mutations: {},
-	actions: {
+import $C from '@/common/config.js';
+import $http from '@/common/request.js';
+import $U from '@/common/util.js';
 
+export default new Vuex.Store({
+	state: {
+		//登录
+		loginStatus: false,
+		token: false,
+		user: {}
+	},
+	getters: {},
+	mutations: {
+		//登录成功后，用户数据存入本地存储
+		login(state, user) {
+			state.loginStatus = true
+			state.user = user
+			state.token = state.user.token
+			uni.setStorageSync('user',JSON.stringify(user));
+		}
+	},
+	actions: {
+		
 	}
 })

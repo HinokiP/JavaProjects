@@ -1,0 +1,29 @@
+package com.dkliu.vlog.service;
+
+import com.dkliu.vlog.model.dto.LoginDto;
+import com.dkliu.vlog.model.entity.User;
+
+/**
+ * @ClassName UserService
+ * @Description TODO
+ * @Author Hinoki
+ * @Date 2020/12/5
+ **/
+
+public interface UserService {
+    /**
+     * 登录
+     *
+     * @param loginDto 登录dto对象
+     * @return boolean
+     */
+    boolean login(LoginDto loginDto);
+
+    /**
+     * 根据手机号查找用户
+     *
+     * @param phone 手机号
+     * @return User
+     */
+    User getUser(String phone);
+}

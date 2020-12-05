@@ -8032,16 +8032,34 @@ function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
-var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
+var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));
 
-_vue.default.use(_vuex.default);var _default =
+
+
+var _config = _interopRequireDefault(__webpack_require__(/*! @/common/config.js */ 13));
+var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.js */ 14));
+var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util.js */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}_vue.default.use(_vuex.default);var _default =
 
 new _vuex.default.Store({
-  state: {},
+  state: {
+    //登录
+    loginStatus: false,
+    token: false,
+    user: {} },
+
   getters: {},
-  mutations: {},
+  mutations: {
+    //登录成功后，用户数据存入本地存储
+    login: function login(state, user) {
+      state.loginStatus = true;
+      state.user = user;
+      state.token = state.user.token;
+      uni.setStorageSync('user', JSON.stringify(user));
+    } },
+
   actions: {} });exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 /* 12 */
@@ -9172,6 +9190,120 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 /* 14 */
+/*!***************************************************!*\
+  !*** D:/Projects/Vlog/vlog-app/common/request.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _config = _interopRequireDefault(__webpack_require__(/*! @/common/config.js */ 13));
+var _index = _interopRequireDefault(__webpack_require__(/*! @/store/index.js */ 11));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+{
+  common: {
+    method: 'GET',
+    header: {
+      "content-type": "application/json" },
+
+    data: {} },
+
+  request: function request() {var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    options.url = _config.default.webUrl + options.url;
+    options.method = options.method || this.common.method;
+    options.header = options.header || this.common.header;
+
+    // 验证权限token
+    if (options.token) {
+      options.header.token = _index.default.state.token;
+      if (!options.noCheck && !options.header.token && !options.notoast) {
+        return uni.showToast({
+          title: '非法token,请重新登录',
+          icon: 'none' });
+
+      }
+    }
+
+    return new Promise(function (res, rej) {
+      uni.request(_objectSpread(_objectSpread({},
+      options), {}, {
+        success: function success(result) {
+          // 返回原始数据
+          // console.log(result);
+          if (options.native) {
+            return res(result);
+          }
+          // 请求服务端失败
+          if (result.statusCode !== 200 && !options.notoast) {
+            uni.showToast({
+              title: result.data.msg || '请求失败',
+              icon: 'none' });
+
+            return rej(result.data);
+          }
+          // 成功
+          res(result.data.data);
+        },
+        fail: function fail(error) {
+          uni.showToast({
+            title: error.errMsg || '请求失败',
+            icon: 'none' });
+
+          return rej();
+        } }));
+
+    });
+  },
+  get: function get(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    options.url = url;
+    options.data = data;
+    options.method = 'GET';
+    return this.request(options);
+  },
+  post: function post(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    options.url = url;
+    options.data = data;
+    options.method = 'POST';
+    return this.request(options);
+  },
+  upload: function upload(url) {var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    options.url = _config.default.webUrl + url;
+    options.header = options.header || {};
+    // 验证权限token
+    if (options.token) {
+      options.header.token = _index.default.state.token;
+      if (!options.header.token) {
+        return uni.showToast({
+          title: '非法token,请重新登录',
+          icon: 'none' });
+
+      }
+    }
+
+    return new Promise(function (res, rej) {
+      uni.uploadFile(_objectSpread(_objectSpread({},
+      options), {}, {
+        success: function success(uploadFileRes) {
+          if (uploadFileRes.statusCode !== 200) {
+            return uni.showToast({
+              title: '上传图片失败',
+              icon: 'none' });
+
+          }
+          var data = JSON.parse(uploadFileRes.data);
+          res(data);
+        },
+        fail: function fail(err) {
+          rej(err);
+        } }));
+
+    });
+
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+/* 15 */
 /*!************************************************!*\
   !*** D:/Projects/Vlog/vlog-app/common/util.js ***!
   \************************************************/
@@ -9179,7 +9311,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _request = _interopRequireDefault(__webpack_require__(/*! ./request.js */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _request = _interopRequireDefault(__webpack_require__(/*! ./request.js */ 14));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   // 监听网络
   onNetWork: function onNetWork() {
@@ -9326,120 +9458,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       logintype: obj.logintype,
       token: obj.token,
       userinfo: false };
-
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-/* 15 */
-/*!***************************************************!*\
-  !*** D:/Projects/Vlog/vlog-app/common/request.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _config = _interopRequireDefault(__webpack_require__(/*! @/common/config.js */ 13));
-var _index = _interopRequireDefault(__webpack_require__(/*! @/store/index.js */ 11));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
-{
-  common: {
-    method: 'GET',
-    header: {
-      "content-type": "application/json" },
-
-    data: {} },
-
-  request: function request() {var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    options.url = _config.default.webUrl + options.url;
-    options.method = options.method || this.common.method;
-    options.header = options.header || this.common.header;
-
-    // 验证权限token
-    if (options.token) {
-      options.header.token = _index.default.state.token;
-      if (!options.noCheck && !options.header.token && !options.notoast) {
-        return uni.showToast({
-          title: '非法token,请重新登录',
-          icon: 'none' });
-
-      }
-    }
-
-    return new Promise(function (res, rej) {
-      uni.request(_objectSpread(_objectSpread({},
-      options), {}, {
-        success: function success(result) {
-          // 返回原始数据
-          // console.log(result);
-          if (options.native) {
-            return res(result);
-          }
-          // 请求服务端失败
-          if (result.statusCode !== 200 && !options.notoast) {
-            uni.showToast({
-              title: result.data.msg || '请求失败',
-              icon: 'none' });
-
-            return rej(result.data);
-          }
-          // 成功
-          res(result.data.data);
-        },
-        fail: function fail(error) {
-          uni.showToast({
-            title: error.errMsg || '请求失败',
-            icon: 'none' });
-
-          return rej();
-        } }));
-
-    });
-  },
-  get: function get(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    options.url = url;
-    options.data = data;
-    options.method = 'GET';
-    return this.request(options);
-  },
-  post: function post(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    options.url = url;
-    options.data = data;
-    options.method = 'POST';
-    return this.request(options);
-  },
-  upload: function upload(url) {var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    options.url = _config.default.webUrl + url;
-    options.header = options.header || {};
-    // 验证权限token
-    if (options.token) {
-      options.header.token = _index.default.state.token;
-      if (!options.header.token) {
-        return uni.showToast({
-          title: '非法token,请重新登录',
-          icon: 'none' });
-
-      }
-    }
-
-    return new Promise(function (res, rej) {
-      uni.uploadFile(_objectSpread(_objectSpread({},
-      options), {}, {
-        success: function success(uploadFileRes) {
-          if (uploadFileRes.statusCode !== 200) {
-            return uni.showToast({
-              title: '上传图片失败',
-              icon: 'none' });
-
-          }
-          var data = JSON.parse(uploadFileRes.data);
-          res(data);
-        },
-        fail: function fail(err) {
-          rej(err);
-        } }));
-
-    });
 
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
