@@ -1,9 +1,8 @@
 package com.dkliu.vlog.Controller;
 
 import com.dkliu.vlog.common.ResponseResult;
-import com.dkliu.vlog.common.ResultCode;
 import com.dkliu.vlog.model.Card;
-import com.dkliu.vlog.utils.DataUtil;
+import com.dkliu.vlog.util.DataUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

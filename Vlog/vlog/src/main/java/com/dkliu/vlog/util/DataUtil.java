@@ -1,4 +1,4 @@
-package com.dkliu.vlog.utils;
+package com.dkliu.vlog.util;
 
 import com.dkliu.vlog.model.Card;
 

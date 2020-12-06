@@ -1,6 +1,6 @@
 package com.dkliu.vlog.service;
 
-import com.dkliu.vlog.VlogApplication;
+import com.dkliu.vlog.VlogApiApplication;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = VlogApplication.class)
+@SpringBootTest(classes = VlogApiApplication.class)
 @Slf4j
 class UserServiceTest {
 
