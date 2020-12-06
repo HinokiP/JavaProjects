@@ -6,7 +6,12 @@
     "pages/my/my",
     "pages/msg/msg",
     "pages/my/my",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/user-set/user-set",
+    "pages/about/about",
+    "pages/user-info/user-info",
+    "pages/user-feedback/user-feedback",
+    "pages/user-safe/user-safe"
   ],
   "subPackages": [],
   "window": {
@@ -50,6 +55,5 @@
   "usingComponents": {
     "divider": "/components/common/divider",
     "no-thing": "/components/common/no-thing"
-  },
-  "sitemapLocation": "sitemap96.json"
+  }
 }
