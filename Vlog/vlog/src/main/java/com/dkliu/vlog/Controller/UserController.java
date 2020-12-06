@@ -3,6 +3,7 @@ package com.dkliu.vlog.Controller;
 import com.dkliu.vlog.common.ResponseResult;
 import com.dkliu.vlog.common.ResultCode;
 import com.dkliu.vlog.model.dto.LoginDto;
+import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.service.RedisService;
 import com.dkliu.vlog.service.UserService;
 import com.dkliu.vlog.util.SmsUtil;
@@ -55,6 +56,17 @@ public class UserController {
         } else {
             redisService.set(phone, code, 1L);
             return ResponseResult.failure(ResultCode.SMS_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/phonelogin")
+    public ResponseResult login(@RequestBody PhoneLoginDto phoneLoginDto) {
+        log.info("phoneLoginDto:" + phoneLoginDto);
+        boolean flag = userService.phoneLogin(phoneLoginDto);
+        if (flag) {
+            return ResponseResult.success(userService.getUser(phoneLoginDto.getPhone()));
+        } else {
+            return ResponseResult.failure(ResultCode.USER_VERIFY_CODE_ERROR);
         }
     }
 }

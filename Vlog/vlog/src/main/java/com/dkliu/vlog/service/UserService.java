@@ -1,6 +1,7 @@
 package com.dkliu.vlog.service;
 
 import com.dkliu.vlog.model.dto.LoginDto;
+import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.model.entity.User;
 
 /**
@@ -26,4 +27,12 @@ public interface UserService {
      * @return User
      */
     User getUser(String phone);
+
+    /**
+     * 手机短信验证码登录
+     *
+     * @param phoneLoginDto 入参
+     * @return boolean
+     */
+    boolean phoneLogin(PhoneLoginDto phoneLoginDto);
 }
