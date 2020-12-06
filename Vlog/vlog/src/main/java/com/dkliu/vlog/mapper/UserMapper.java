@@ -1,10 +1,7 @@
 package com.dkliu.vlog.mapper;
 
 import com.dkliu.vlog.model.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.sql.SQLException;
@@ -43,4 +40,14 @@ public interface UserMapper {
             "</when>",
             "</script>"})
     User findUserByPhone(@Param("phone") String phone) throws SQLException;
+
+    /**
+     * 修改用户信息
+     *
+     * @param user 用户对象
+     * @throws SQLException 异常
+     */
+    @Update("UPDATE t_user SET password=#{password}, nickname=#{nickname}, avatar=#{avatar}, gender=#{gender}, birthday=#{birthday}, address=#{address}" +
+            "WHERE phone=#{phone}")
+    void updateUser(User user) throws SQLException;
 }

@@ -83,4 +83,25 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public User updateUser(User user) {
+        //先查出数据库原用户信息
+        User savedUser = getUser(user.getPhone());
+        //相应字段做修改，注意前端传值的时候这些字段如果没有修改也要传原值，以免被覆盖为空
+        savedUser.setPassword(DigestUtils.md5Hex(user.getPassword()));
+        savedUser.setNickname(user.getNickname());
+        savedUser.setAvatar(user.getAvatar());
+        savedUser.setGender(user.getGender());
+        savedUser.setBirthday(user.getBirthday());
+        savedUser.setAddress(user.getAddress());
+        //更新数据
+        try {
+            userMapper.updateUser(savedUser);
+        } catch (SQLException throwables) {
+            System.out.println("修改用户信息出现异常");
+        }
+        //将修改该后的用户信息返回
+        return savedUser;
+    }
 }

@@ -35,4 +35,12 @@ public interface UserService {
      * @return boolean
      */
     boolean phoneLogin(PhoneLoginDto phoneLoginDto);
+
+    /**
+     * 修改用户信息
+     *
+     * @param user 用户对象
+     * @return User
+     */
+    User updateUser(User user);
 }

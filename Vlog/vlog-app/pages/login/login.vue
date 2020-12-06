@@ -117,16 +117,10 @@
 				if(!this.validate()) return;
 				//请求数据
 				this.$H
-					.post('./user/sendcode',
-					{
-						phone:this.phone
-					},{
-						native:true
-					}).then(res=>{
-						uni.showToast({
-							title:res.data.msg,
-							icon:'none'
-						});
+					.post('/user/sendcode?phone=' + this.phone, {
+						native: true
+					})
+					.then(res=>{
 						//倒计时
 						this.codeTime = 60;
 						let timer = setInterval(()=>{
@@ -136,7 +130,7 @@
 								this.codeTime=0;
 								clearInterval(timer)
 							}
-						},1000);
+						}, 1000);
 					});
 			},
 			//表单验证

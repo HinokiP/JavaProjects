@@ -4,6 +4,7 @@ import com.dkliu.vlog.common.ResponseResult;
 import com.dkliu.vlog.common.ResultCode;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
+import com.dkliu.vlog.model.entity.User;
 import com.dkliu.vlog.service.RedisService;
 import com.dkliu.vlog.service.UserService;
 import com.dkliu.vlog.util.SmsUtil;
@@ -68,5 +69,12 @@ public class UserController {
         } else {
             return ResponseResult.failure(ResultCode.USER_VERIFY_CODE_ERROR);
         }
+    }
+
+    @PostMapping(value = "/update")
+    public ResponseResult update(@RequestBody User user) {
+        log.info("user:" + user);
+        User newUser = userService.updateUser(user);
+        return ResponseResult.success(newUser);
     }
 }
