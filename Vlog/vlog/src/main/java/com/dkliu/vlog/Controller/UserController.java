@@ -7,10 +7,13 @@ import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.model.entity.User;
 import com.dkliu.vlog.service.RedisService;
 import com.dkliu.vlog.service.UserService;
+import com.dkliu.vlog.util.FileResource;
 import com.dkliu.vlog.util.SmsUtil;
 import com.dkliu.vlog.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -31,6 +34,8 @@ public class UserController {
     private SmsUtil smsUtil;
     @Resource
     private RedisService redisService;
+    @Resource
+    private FileResource fileResource;
 
     @PostMapping(value = "/login")
     ResponseResult login(@RequestBody LoginDto loginDto) {
@@ -76,5 +81,24 @@ public class UserController {
         log.info("user:" + user);
         User newUser = userService.updateUser(user);
         return ResponseResult.success(newUser);
+    }
+
+    @PostMapping(value = "/upload")
+    public ResponseResult uploadFile(MultipartFile file) {
+        //声明图片的地址路径，返回到前端
+        String path = null;
+        //判断文件不能为空
+        if (file != null) {
+            //获得文件上传的名称
+            String fileName = file.getOriginalFilename();
+            System.out.println(fileName);
+            //调用上传服务，得到上传后的新文件名
+            path = userService.uploadFile(file);
+        }
+        if (StringUtils.isNotBlank(path)) {
+            //拼接上服务器地址前缀，得到最终返回给前端的url
+            path = fileResource.getOssHost() + path;
+        }
+        return ResponseResult.success(path);
     }
 }

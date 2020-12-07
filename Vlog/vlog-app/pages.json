@@ -137,7 +137,16 @@
             "path" : "pages/user-safe/user-safe",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "账号与安全",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/change-pwd/change-pwd",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改密码",
                 "enablePullDownRefresh": false
             }
             

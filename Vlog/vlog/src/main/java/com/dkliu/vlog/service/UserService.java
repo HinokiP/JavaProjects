@@ -3,6 +3,7 @@ package com.dkliu.vlog.service;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.model.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @ClassName UserService
@@ -43,4 +44,12 @@ public interface UserService {
      * @return User
      */
     User updateUser(User user);
+
+    /**
+     * 上传到OSS
+     *
+     * @param file 文件对象
+     * @return 上传后的url
+     */
+    String uploadFile(MultipartFile file);
 }
