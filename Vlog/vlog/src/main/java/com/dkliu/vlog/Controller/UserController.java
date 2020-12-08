@@ -4,6 +4,7 @@ import com.dkliu.vlog.common.ResponseResult;
 import com.dkliu.vlog.common.ResultCode;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
+import com.dkliu.vlog.model.dto.WxLoginDto;
 import com.dkliu.vlog.model.entity.User;
 import com.dkliu.vlog.service.RedisService;
 import com.dkliu.vlog.service.UserService;
@@ -100,5 +101,15 @@ public class UserController {
             path = fileResource.getOssHost() + path;
         }
         return ResponseResult.success(path);
+    }
+
+    @PostMapping(value = "/wxLogin")
+    public ResponseResult wxLogin(@RequestBody WxLoginDto wxLoginDto) {
+        log.info("wxLoginDto:" + wxLoginDto);
+        User user = userService.wxLogin(wxLoginDto);
+        if (user != null) {
+            return ResponseResult.success(user);
+        }
+        return ResponseResult.failure(ResultCode.USER_SIGN_IN_FAIL);
     }
 }

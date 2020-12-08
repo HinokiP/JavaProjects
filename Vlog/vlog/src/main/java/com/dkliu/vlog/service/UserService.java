@@ -2,6 +2,7 @@ package com.dkliu.vlog.service;
 
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
+import com.dkliu.vlog.model.dto.WxLoginDto;
 import com.dkliu.vlog.model.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,4 +53,12 @@ public interface UserService {
      * @return 上传后的url
      */
     String uploadFile(MultipartFile file);
+
+    /**
+     * 微信登陆
+     *
+     * @param wxLoginDto 入参
+     * @return boolean
+     */
+    User wxLogin(WxLoginDto wxLoginDto);
 }
