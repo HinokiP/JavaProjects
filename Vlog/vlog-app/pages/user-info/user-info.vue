@@ -36,7 +36,7 @@
 		</uni-list-item>
 		
 		<view class="py-2 px-3">
-			<button type="primary" class="bg-main text-white" style="border-radius: 50rpx;border: 0;">
+			<button @click="submit" type="primary" class="bg-main text-white" style="border-radius: 50rpx;border: 0;">
 				完成
 			</button>
 		</view>
@@ -64,10 +64,10 @@
 			return {
 				themeColor: '#007AFF',
 				cityPickerValueDefault: [0, 0, 1],
-				avatar: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/avatar/1.jpg',
+				// avatar: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/avatar/1.jpg',
 				pickerText: '',
 				nickname: '',
-				gender: '',
+				gender: 0,
 				birthday: ''
 			};
 		},
@@ -124,17 +124,30 @@
 						//本地文件地址
 						console.log(res.tempFilePaths[0]);
 						this.$H
-							.upload('/user/upload',{
+							.upload('/user/upload', {
 								filePath: res.tempFilePaths[0],
 								name: 'file' //一定要和后端接口的入参名字一样
 							})
 							.then(result => {
-								console.log(result.data);
-								uni.showToast({
-									title: '修改头像成功',
-									icon: 'none'///
-								});
-								this.avatar = result.data;
+								let data = {
+									id: this.id,
+									phone: this.phone,
+									password: this.password,
+									nickname: this.nickname,
+									avatar: result.data,
+									gender: this.user.gender,
+									birthday: this.user.birthday,
+									address: this.user.address,
+									createTime: this.user.createTime
+								};
+								this.$H.post('/user/update', data).then(res => {
+									console.log(res);
+									this.$store.commit('editUserInfo', data);
+									uni.showToast({
+										title: '修改头像成功',
+										icon: 'none'
+									});
+								})								
 							})
 							.catch(err => {
 								console.log(err);
@@ -159,7 +172,27 @@
 				});
 			},
 			//提交
-			submit() {}
+			submit() {
+				let data = {
+					id: this.id,
+					phone: this.user.phone,
+					password: this.user.password,
+					nickname: this.nickname,
+					avatar: this.user.avatar,
+					gender: this.gender,
+					birthday: this.birthday,
+					address: this.pickerText,
+					createTime: this.user.createTime
+				};
+				this.$H.post('/user/update', data).then(res => {
+					console.log(res);
+					this.$store.commit('editUserInfo', data);
+					uni.showToast({
+						title: '修改资料成功',
+						icon: 'none'
+					});
+				});
+			}
 		}
 	};
 </script>
