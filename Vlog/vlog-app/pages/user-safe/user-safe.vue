@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-list-item title="修改密码" @click="open('change-pwd')"></uni-list-item>
+		<uni-list-item title="修改密码" @click="open('user-password')"></uni-list-item>
 		<uni-list-item title="绑定手机"></uni-list-item>
 		<uni-list-item title="绑定微信"></uni-list-item>
 		<uni-list-item title="绑定QQ"></uni-list-item>
