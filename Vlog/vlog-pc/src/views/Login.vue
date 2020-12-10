@@ -1,7 +1,7 @@
 <template>
     <div class="bg row">
         <v-form ref="form" v-model="valid" lazy-validation class="col" v-if="!flag">
-            <v-text-field v-model="phone" :counter="il" :rules="phoneRules" label="Phone" required></v-text-field>
+            <v-text-field v-model="phone" :counter="11" :rules="phoneRules" label="Phone" required></v-text-field>
             <v-text-field v-model="password" :rules="passRules" label="Password" required></v-text-field>
             <v-checkbox
                 v-model="checkbox"
