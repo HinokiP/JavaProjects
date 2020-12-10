@@ -19,3 +19,10 @@ export default {
   })
 }
 </script>
+
+<style lang="scss">
+.move {
+  animation-duration: 0.6s;
+  animation-delay:0.2s;
+}
+</style>
