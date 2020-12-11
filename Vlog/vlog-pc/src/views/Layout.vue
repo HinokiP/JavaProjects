@@ -64,14 +64,18 @@
       class="overflow-y-auto"
       max-height="600"
     >
-      <v-container style="height: 1000px;"></v-container>
+      <v-container style="height: 1000px;padding-top: 250px;">
+        <router-view />
+      </v-container>
     </v-sheet>
   </v-card>
 </template>
 
 <script>
 export default {
-
+  data: () => ({
+    show: true
+  })
 }
 </script>
 

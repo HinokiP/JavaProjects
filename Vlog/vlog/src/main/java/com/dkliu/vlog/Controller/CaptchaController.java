@@ -26,7 +26,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping(value = "api")
 @Slf4j
-public class KaptchaController {
+public class CaptchaController {
     @Resource
     private DefaultKaptcha defaultKaptcha;
     @Resource

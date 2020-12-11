@@ -1,5 +1,6 @@
 package com.dkliu.vlog.service;
 
+import com.dkliu.vlog.model.dto.CaptchaLoginDto;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.model.dto.WxLoginDto;
@@ -61,4 +62,12 @@ public interface UserService {
      * @return boolean
      */
     User wxLogin(WxLoginDto wxLoginDto);
+
+    /**
+     * 验证码登录
+     *
+     * @param captchaLoginDto 入参
+     * @return User
+     */
+    User captchaLogin(CaptchaLoginDto captchaLoginDto);
 }

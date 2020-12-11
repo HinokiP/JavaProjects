@@ -1,55 +1,64 @@
 <template>
-  <v-carousel
-    cycle
-    height="400"
-    hide-delimiter-background
-    show-arrows-on-hover
-  >
-    <v-carousel-item
-      v-for="(slide, i) in slides"
-      :key="i"
-    >
-      <v-sheet
-        :color="colors[i]"
-        height="100%"
-      >
-        <v-row
-          class="fill-height"
-          align="center"
-          justify="center"
-        >
-          <div class="display-3">
-            {{ slide }} Slide
-          </div>
-        </v-row>
+  <v-row>
+    <v-col>
+      <v-sheet height="400">
+        <v-calendar
+          ref="calendar"
+          :now="today"
+          :value="today"
+          :events="events"
+          color="primary"
+          type="week"
+        ></v-calendar>
       </v-sheet>
-    </v-carousel-item>
-  </v-carousel>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
   export default {
-    data () {
-      return {
-        colors: [
-          'indigo',
-          'warning',
-          'pink darken-2',
-          'red lighten-1',
-          'deep-purple accent-4',
-        ],
-        slides: [
-          'First',
-          'Second',
-          'Third',
-          'Fourth',
-          'Fifth',
-        ],
-      }
+    data: () => ({
+      today: '2019-01-08',
+      events: [
+        {
+          name: 'Weekly Meeting',
+          start: '2019-01-07 09:00',
+          end: '2019-01-07 10:00',
+        },
+        {
+          name: 'Mash Potatoes',
+          start: '2019-01-09 12:30',
+          end: '2019-01-09 15:30',
+        },
+      ],
+    }),
+    mounted () {
+      this.$refs.calendar.scrollToTime('08:00')
     },
   }
 </script>
 
-<style>
+<style scoped>
+.my-event {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 2px;
+  background-color: #1867c0;
+  color: #ffffff;
+  border: 1px solid #1867c0;
+  font-size: 12px;
+  padding: 3px;
+  cursor: pointer;
+  margin-bottom: 1px;
+  left: 4px;
+  margin-right: 8px;
+  position: relative;
+}
 
+.my-event.with-time {
+  position: absolute;
+  right: 4px;
+  margin-right: 0px;
+}
 </style>

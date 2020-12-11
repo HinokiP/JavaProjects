@@ -15,7 +15,7 @@ import java.util.Properties;
  **/
 
 @Configuration
-public class KaptchaConfig {
+public class CaptchaConfig {
     @Bean
     public DefaultKaptcha defaultKaptcha() {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();

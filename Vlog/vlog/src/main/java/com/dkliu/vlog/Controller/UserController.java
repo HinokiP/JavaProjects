@@ -2,6 +2,7 @@ package com.dkliu.vlog.Controller;
 
 import com.dkliu.vlog.common.ResponseResult;
 import com.dkliu.vlog.common.ResultCode;
+import com.dkliu.vlog.model.dto.CaptchaLoginDto;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.model.dto.WxLoginDto;
@@ -107,6 +108,16 @@ public class UserController {
     public ResponseResult wxLogin(@RequestBody WxLoginDto wxLoginDto) {
         log.info("wxLoginDto:" + wxLoginDto);
         User user = userService.wxLogin(wxLoginDto);
+        if (user != null) {
+            return ResponseResult.success(user);
+        }
+        return ResponseResult.failure(ResultCode.USER_SIGN_IN_FAIL);
+    }
+
+    @PostMapping(value = "/captchaLogin")
+    public ResponseResult captchaLogin(@RequestBody CaptchaLoginDto captchaLoginDto) {
+        log.info("captchaLoginDto:" + captchaLoginDto);
+        User user = userService.captchaLogin(captchaLoginDto);
         if (user != null) {
             return ResponseResult.success(user);
         }

@@ -3,6 +3,7 @@ package com.dkliu.vlog.service.impl;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.dkliu.vlog.mapper.UserMapper;
+import com.dkliu.vlog.model.dto.CaptchaLoginDto;
 import com.dkliu.vlog.model.dto.LoginDto;
 import com.dkliu.vlog.model.dto.PhoneLoginDto;
 import com.dkliu.vlog.model.dto.WxLoginDto;
@@ -177,5 +178,24 @@ public class UserServiceImpl implements UserService {
         }
         //老用户
         return user;
+    }
+
+    @Override
+    public User captchaLogin(CaptchaLoginDto captchaLoginDto) {
+        boolean flag = redisService.existsKey(captchaLoginDto.getPhone());
+        if (flag) {
+            String saveCode = redisService.getValue(captchaLoginDto.getPhone(), String.class);
+            //验证码一致
+            if (saveCode.equalsIgnoreCase(captchaLoginDto.getCaptcha())) {
+                User user = getUser(captchaLoginDto.getPhone());
+                if (user != null) {
+                    //密码也正确
+                    if (user.getPassword().equals(DigestUtils.md5Hex(captchaLoginDto.getPassword()))) {
+                        return user;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
