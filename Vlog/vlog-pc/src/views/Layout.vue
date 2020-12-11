@@ -19,7 +19,7 @@
 
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>我的博客</v-toolbar-title>
+      <v-toolbar-title>Hinoki</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
