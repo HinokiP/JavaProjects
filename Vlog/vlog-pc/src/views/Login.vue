@@ -95,7 +95,7 @@ export default {
     justify-content: space-around;
     .col {
         flex: 0 0 40%;
-        background-color: #eee;
+        background-color: rgb(255,255,255,0.2);
         border-radius: 10px;
         // height: 80px;
         z-index: 10;
