@@ -17,11 +17,18 @@
         ></v-img>
       </template>
 
+
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-toolbar-title>Hinoki</v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+      
+          <v-avatar>
+          <v-img :src="avatar"></v-img>
+        </v-avatar>
+        
 
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
@@ -38,7 +45,7 @@
           </v-btn>
         </template>
 
-        <v-list>
+        <v-list>          
           <v-list-item @click="$router.push('/')">
             <v-list-item-title>系统设置</v-list-item-title>
           </v-list-item>
@@ -72,10 +79,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   data: () => ({
     show: true
-  })
+  }),
+  computed: {
+			...mapState({
+				loginStatus: state => state.loginStatus,
+				user: state => state.user
+			}),
+			//用户头像
+			avatar() {
+				return this.user.avatar ? this.user.avatar : '/static/defaul.jpg';
+			}
+  }
 }
 </script>
 

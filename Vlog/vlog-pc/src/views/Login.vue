@@ -1,8 +1,8 @@
 <template>
     <div class="bg row">
         <v-form ref="form" v-model="valid" lazy-validation class="col" v-if="!flag">
-            <v-text-field v-model="phone" :counter="11" :rules="phoneRules" label="Phone" required></v-text-field>
-            <v-text-field v-model="password" :rules="passRules" label="Password" required></v-text-field>
+            <v-text-field v-model="phone" :counter="11" :rules="phoneRules" label="Phone" required value="13174153016"></v-text-field>
+            <v-text-field v-model="password" :rules="passRules" label="Password" required value="123456"></v-text-field>
             <v-row>
                 <v-col cols="12" md="8">
                     <v-text-field v-model="verifyCode" label="verifyCode" required></v-text-field>
