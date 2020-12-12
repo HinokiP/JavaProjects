@@ -1,60 +1,115 @@
+
 <template>
   <div>
-    <v-row>
-      <v-col style="z-index: 0;">
-        <v-text-field label="用户名" :rules="rules" hide-details="auto"  v-model="user.nickname"></v-text-field>
-        <v-text-field label="性别" v-model="this.genderText"></v-text-field>
-        <v-text-field label="生日" v-model="user.birthday"></v-text-field>
-        <v-text-field label="地址" v-model="user.address"></v-text-field>
-      </v-col>
-      <v-col style="z-index: 0;">
-        <div>头像</div>
-        <v-img :src="avatar"></v-img>
-      </v-col>
-    </v-row>
-    
-    <div class="text-center">
-    <v-btn
-      rounded
-      color="primary"
-      dark @click="alert"
-    >
-      修改
-    </v-btn>
+    <v-form ref="form" v-model="valid" lazy-validation>
+      <v-text-field v-model="nickname" :counter="10" :rules="nameRules" label="昵称"></v-text-field>
+      <v-select
+        v-model="genderSelect"
+        :items="items"
+        :rules="[(v) => !!v || 'Gender is required']"
+        label="性别"
+        required>
+      </v-select>
+
+      <v-row justify="start">
+        <v-date-picker v-model="birthdayPicker" elevation="5"></v-date-picker>
+      </v-row>
+
+      <v-row justify="start" class="my-6">
+        <v-distpicker
+          :provience="addressSelect.provience"
+          :city="addressSelect.city"
+          :area="addressSelect.area"
+          @provience="selectProvience"
+          @city="selectCity"
+          @area="selectArea">
+        </v-distpicker>
+      </v-row>
+
+      <v-btn color="primary" class="mr-12" @click="submit">
+        提交
+      </v-btn>
+      <v-btn color="success" @click="reset">
+        重置
+      </v-btn>
+    </v-form>
   </div>
-  </div>
-  
 </template>
 
 <script>
-const genderArray = ['保密','男','女'];
-import { mapState } from 'vuex';
-  export default {
-    data: () => ({
-      rules: [
-        value => !!value || 'Required.',
-        value => (value && value.length >= 3) || 'Min 3 characters',
-      ]
-    }),
-    methods: {
-      alert() {
-        alert('this.gender');
+import { mapState } from 'vuex'
+import VDistpicker from 'v-distpicker'
+export default {
+  name: 'UserInfo',
+  components: {
+    VDistpicker
+  },
+  data: () => ({
+    valid: true,
+    nickname: '',
+    nameRules: [
+      (v) => !!v || 'Name is required',
+      (v) => (v && v.length <= 10) || 'Name must be less than 10 characters'
+    ],
+    genderSelect: null,
+    items: ['保密','男','女'],
+    checkbox: false,
+    birthdayPicker: new Date().toISOString().substr(0, 10),
+    addressSelect: {provience: '江苏省', city: '南京市', area: '栖霞区'}
+  }),
+  computed: {
+    ...mapState({
+      loginStatus: (state) => state.loginStatus,
+      user: (state) => state.user
+    })
+  },
+  created() {},
+  methods: {
+    reset() {
+      this.$refs.form.reset()
+    },
+    selectProvience(v) {
+      console.log(v);
+      this.addressSelect.provience = v.value
+    },
+    selectCity(v) {
+      console.log(v);
+      this.addressSelect.city = v.value
+    },
+    selectArea(v) {
+      console.log(v);
+      this.addressSelect.area = v.value
+    },
+    getGenderTxt() {
+      switch (this.genderSelect) {
+        case 0:
+          return '保密'
+        case 1:
+          return '男'
+        case 2:
+          return '女'
       }
     },
-    computed: {
-			...mapState({
-        loginStatus: state => state.loginStatus,
-				user: state => state.user
-			}),
-			genderText() {
-				return genderArray[this.user.gender];
-      },
-      //用户头像
-			avatar() {
-				return this.user.avatar ? this.user.avatar : '/static/defaul.jpg';
-      }
-		}
+    submit() {
+      alert(this.items.indexOf(this.genderSelect))
+      let newUser = this.user
+      newUser.nickname = this.nickname
+      newUser.gender = this.items.indexOf(this.genderSelect) //注意字符串->整型
+      newUser.birthday = this.birthdayPicker
+      newUser.address = `${this.addressSelect.provience}${this.addressSelect.city}${this.addressSelect.area}`
+      this.$store.commit('editUserInfo', newUser)
+      alert(JSON.stringify(newUser))
+      this.axios({
+        method: 'post',
+        url: '/user/update',
+        data: newUser
+      }).then((res) => {
+        console.log(JSON.stringify(res.data.data));
+        this.$store.commit('login', res.data.data)
+      })
+    }
   }
+}
 </script>
 
 <style>

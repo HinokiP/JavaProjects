@@ -20,15 +20,13 @@
 
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Hinoki</v-toolbar-title>
+      <v-toolbar-title>{{ user.nickname }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-
       
-          <v-avatar>
-          <v-img :src="avatar"></v-img>
-        </v-avatar>
-        
+      <v-avatar>
+        <v-img :src="avatar"></v-img>
+      </v-avatar>
 
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
