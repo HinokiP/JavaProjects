@@ -1,100 +1,90 @@
 <template>
-  <v-card class="overflow-hidden">
-    <v-app-bar
-      absolute
-      color="#6A76AB"
-      dark
-      shrink-on-scroll
-      prominent
-      src="https://picsum.photos/1920/1080?random"
-      fade-img-on-scroll
-      scroll-target="#scrolling-techniques-3"
-    >
-      <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
-        ></v-img>
-      </template>
-
-
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-      <v-toolbar-title>{{ user.nickname }}</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-      
-      <v-avatar>
-        <v-img :src="avatar"></v-img>
-      </v-avatar>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-menu bottom left>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
+  <v-app>
+    <v-card>
+      <v-app-bar
+        color="#FCB69F" clipped-left dark height="500"
+        src="https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/img/8.jpg">
+        <template v-slot:img="{ props }">
+            <v-img v-bind="props" gradient="to top right, rgba(40,44,52,.6), rgba(211,190,233,.4)"></v-img>
         </template>
+        <v-toolbar-title class="display-1">{{ user.nickname }}的博客</v-toolbar-title>
+        <div class="header">
+          <nav-bar class="nav"></nav-bar>
+        </div>
+        <v-spacer></v-spacer>
+      </v-app-bar>
+    </v-card>
 
-        <v-list>          
-          <v-list-item @click="$router.push('/')">
-            <v-list-item-title>系统设置</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="$router.push('/')">
-            <v-list-item-title>主题设置</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="$router.push('/login')">
-            <v-list-item-title>退出登录</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <template v-slot:extension>
-        <v-tabs align-with-title>
-          <v-tab @click="$router.push('/news')">动态</v-tab>
-          <v-tab @click="$router.push('/message')">消息</v-tab>
-          <v-tab @click="$router.push('/my')">我的</v-tab>
-        </v-tabs>
-      </template>
-    </v-app-bar>
-    <v-sheet
-      id="scrolling-techniques-3"
-      class="overflow-y-auto"
-      max-height="600"
-    >
-      <v-container style="height: 1000px;padding-top: 250px;">
+    <v-main>
+      <v-container class="main-content">
         <router-view />
       </v-container>
-    </v-sheet>
-  </v-card>
+    </v-main>
+
+    <div class="footer-bg">
+      <v-row justify="center" align="center">
+        <v-col cols="12" md="12">
+          © 2017-2020 Hinoki, 版权所有 站点总字数：74.751k
+        </v-col>
+        <v-col cols="12" md="12">
+          本站已运行 1 年 74 天 10 小时 51 分钟 20 秒
+        </v-col>
+        <v-col cols="12" md="12">
+          本站总访问量 74751 人次，访客数 74751 人
+        </v-col>
+      </v-row>
+    </div>
+  </v-app>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
+import NavBar from '../components/NavBar.vue'
 export default {
-  data: () => ({
-    show: true
-  }),
+  name: 'Layout',
+  components: {
+    NavBar 
+  },
   computed: {
-			...mapState({
-				loginStatus: state => state.loginStatus,
-				user: state => state.user
-			}),
-			//用户头像
-			avatar() {
-				return this.user.avatar ? this.user.avatar : '/static/defaul.jpg';
-			}
+    ...mapState({
+      loginStatus: (state) => state.loginStatus,
+      user: (state) => state.user
+    })
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.header {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  .nav {
+    position: fixed;
+    top: 10;
+    z-index: 1000;
+  }
+}
 
+.main-content {
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07) !important;
+  background-color: #fff;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  position: relative;
+  top: -90px;
+  width: 80%;
+  margin: 0 auto;
+  z-index: 999;
+}
+
+.footer-bg {
+  height: 140px;
+  background-color: #EE6E73;
+  background-image: linear-gradient(to right, #BF30AC 0%, #0F9D58 100%);
+  opacity: 0.7;
+  text-align: center;
+  color: #FFF;
+}
 </style>
