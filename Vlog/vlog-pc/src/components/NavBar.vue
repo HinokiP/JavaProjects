@@ -1,55 +1,121 @@
 <template>
-  <v-row>
-      <v-btn color="primary" class="ma-2 white--text" @click="$router.push('/index')">
-        <v-icon right dark class="mr-2">
-            mdi-home
-        </v-icon>
-          主页
-      </v-btn>
+  <div class="nav-wrapper" ref="navbar" :class="{ bgColor: active }">
+      <v-row class="nav-transparent mx-2 pl-12" justify="space-between" align="center">
+          <v-col cols="12" md="3">
+              <router-link to="/index">
+                <h1 class="grey--text">{{ user.nickname }}的博客</h1>
+              </router-link>
+          </v-col>
 
-      <v-btn color="secondary" class="ma-2 white--text" @click="$router.push('/category')">
-        <v-icon right dark class="mr-2">
-            mdi-format-list-bulleted-square
-        </v-icon>
-        分类
-      </v-btn>
+          <v-col cols="12" md="8">
+              <router-link v-for="(item, index) in items" :to="item.path" :key="index" link class="mr-2">
+                  <v-btn elevation="6" text large class="nav-item" color="#E0E0E0" style="border:none:outline:none;">
+                      <v-icon right dark class="mr-2">
+                          {{ item.icon }}
+                      </v-icon>
+                      {{ item.text }}
+                  </v-btn>
+              </router-link>
+          </v-col>
 
-      <v-btn color="accent" class="ma-2 white--text" @click="$router.push('/tag')">
-        <v-icon right dark class="mr-2">
-            mdi-tag
-        </v-icon>
-        标签
-      </v-btn>
-
-      <v-btn color="primary" class="ma-2 white--text" @click="$router.push('/achieve')">
-        <v-icon right dark class="mr-2">
-            mdi-message
-        </v-icon>
-        归档
-      </v-btn>
-
-      <v-btn color="accent" class="ma-2 white--text" @click="$router.push('/my')">
-          <v-icon right dark class="mr-2">
-              mdi-account
-          </v-icon>
-          我的
-      </v-btn>
-  </v-row>
+          <v-col cols="12" md="1">
+              <v-menu right top>
+                  <template v-slot:activator="{ on,attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on">
+                          <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                  </template>
+                  <v-list color="accent">
+                      <v-list-item link>
+                          <v-list-item-title>系统设置</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link>
+                          <v-list-item-title>主题设置</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link>
+                          <v-list-item-title>退出登录</v-list-item-title>
+                      </v-list-item>
+                  </v-list>
+              </v-menu>
+          </v-col>
+      </v-row>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 export default {
     name: 'NavBar',
+    data: () => ({
+        active: false,
+        items: [
+            {
+                icon: 'mdi-home',
+                text: '主页',
+                path: '/index'
+            },
+            {
+                icon: 'mdi-format-list-bulleted-square',
+                text: '分类',
+                path: '/category'
+            },
+            {
+                icon: 'mdi-message',
+                text: '消息',
+                path: '/message'
+            },
+            {
+                icon: 'mdi-tag',
+                text: '标签',
+                path: '/tag'
+            },
+            {
+                icon: 'mdi-link',
+                text: '友链',
+                path: '/friend'
+            },
+            {
+                icon: 'mdi-account',
+                text: '我的',
+                path: '/my'
+            }
+        ]
+    }),
     computed: {
         ...mapState({
             loginStatus: (state) => state.loginStatus,
             user: (state) => state.user
         })
+    },
+    mounted() {
+        //等到页面产生滚动才执行监听
+        this.$nextTick(function() {
+            window.addEventListener('scroll', this.onScroll)
+        })
+    },
+    methods: {
+        onScroll() {
+            //取得滚动的起点，也就是文档流的顶部
+            let scrolled = document.documentElement.scrollTop || document.body.scrollTop
+            this.active = scrolled > 900
+        },
+        logout() {
+            this.$store.commit('logout')
+            this.$router.push('/login')
+        }
     }
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+.nav-wrapper {
+    position: fixed;
+    top: 10;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.bgColor {
+    background-image: linear-gradient(to right, #8360C3 0%,#2EBF91 100%);
+}
 </style>

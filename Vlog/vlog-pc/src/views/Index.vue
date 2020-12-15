@@ -1,19 +1,20 @@
 <template>
-  <v-main>
+  <v-app>
+    <!-- 顶部导航，父组件定位提供容器，引入封装的导航组件 -->
+    <v-app-bar height="56px" elevation="12" fixed class="nav-transparent">
+      <nav-bar></nav-bar>
+    </v-app-bar>
+    <v-main>
     <v-carousel cycle height="900" hide-delimiter-background show-arrows-on-hover>
       <v-carousel-item v-for="(slide, i) in slides" :key="i">
         <v-sheet height="100%">
           <v-row class="fill-height header">
             <img :src="slide.src" class="slider-img" />
-            <!-- 引入封装的顶部导航组件 -->
-            <div class="nav">
-              <nav-bar></nav-bar>
-            </div>
           </v-row>
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
-    <v-row style="width=80%;margin:0 auto;margin-top:-80px;">
+    <v-row style="width=80%;margin:0 auto;margin-top:0px;">
       <v-col cols="12" md="6" v-for="(card, index) in cards" :key="index">
         <v-card v-if="index < 4">
           <v-img class="white--text" height="450px" :src="card.bgImg">
@@ -61,35 +62,39 @@
         </v-col>
     </v-row>
   </v-main>
+  <my-footer></my-footer>
+  </v-app>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import NavBar from '../components/NavBar'
+import MyFooter from '../components/MyFooter'
 export default {
   name: 'Index',
   data: () => ({
     cards: [],
     slides: [
         {
-          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/antelope-canyon-rocks-cave-light-nature-42700.jpeg'
+          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/colorful-nebula-rainbow-colors-galaxy-universe-digital-art-space.jpeg'
         },
         {
-          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/d6696afb45ea5060f11c4a4bab90f2cc026c3dc2.jpg'
+          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/galaxy-purple-nebula-stars-universe-space.jpeg'
         },
         {
-          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/frozen-glass-frost-macro-shapes-pattern-abstract-42745.jpeg'
+          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/galaxy-stars-ring-shiny-glowing-space.jpeg'
         },
         {
-          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/mountain-dusk-lake-clouds-sky-nature-42715.jpeg'
+          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/planet-stars-tranquility-glowing-universe-galaxy-space.jpeg'
         },
         {
-          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/v2-e460e7518775a5ecf86b935bd5abc74a_r.jpg'
+          src: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/wallpaper/sunset-beach-waves-seascape-sky-scenery-mood-sand-nature.jpeg'
         }
     ]
   }),
   components: {
-    NavBar
+    NavBar,
+    MyFooter
   },
   computed: {
     ...mapState({
@@ -107,14 +112,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  .nav {
-    position: fixed;
-    top: 10;
-    z-index: 1000;
-  }
+.nav-transparent {
+  background-color: transparent !important;
+  background-image: none;
+  box-shadow: none;
 }
 </style>
