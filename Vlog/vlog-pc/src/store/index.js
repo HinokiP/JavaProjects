@@ -7,7 +7,20 @@ export default new Vuex.Store({
   state: {
     loginStatus: false,
     avatar: '',
-    user: {}
+    gender: '',
+    user: {
+      id: 1,
+      phone: '13174153016',
+      password: 'e10adc3949ba59abbe56e057f20f883e',
+      nickname: 'Hinoki',
+      avatar: 'https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/avatar/bd15b2dd-56e9-49b3-8038-a501a76646ac.png',
+      gender: 0,
+      birthday: '2012-02-01',
+      address: '江苏省徐州市云龙区',
+      banner: '',
+      signature: '彼岸花开 | 开到茶靡',
+      createTime: '2020-12-08 23:52:40'
+    }
   },
   getters: {},
   mutations: {
