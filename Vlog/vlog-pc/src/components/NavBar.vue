@@ -117,5 +117,7 @@ export default {
 }
 .bgColor {
     background-image: linear-gradient(to right, #8360C3 0%,#2EBF91 100%);
+    background-color: transparent !important;
+    box-shadow: none;
 }
 </style>

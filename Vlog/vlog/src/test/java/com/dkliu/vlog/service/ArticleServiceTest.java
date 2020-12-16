@@ -3,6 +3,7 @@ package com.dkliu.vlog.service;
 import com.dkliu.vlog.VlogApiApplication;
 import com.dkliu.vlog.model.entity.Article;
 import com.dkliu.vlog.task.ArticleTask;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,15 +35,15 @@ class ArticleServiceTest {
         List<Article> articles = null;
         try {
             articles = future.get();
-        } catch (InterruptedException | ExecutionException e){
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         articleService.insertArticles(articles);
     }
 
-        @Test
-        void selectAll () {
-            List<Article> articles = articleService.selectAll();
-            System.out.println(articles);
-        }
+    @Test
+    void selectByPage() {
+        PageInfo<Article> articlePageInfo = articleService.selectByPage(1, 9, 1);
+        System.out.println(articlePageInfo.getList().size());
     }
+}

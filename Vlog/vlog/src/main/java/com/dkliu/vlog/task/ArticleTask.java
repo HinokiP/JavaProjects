@@ -72,7 +72,6 @@ public class ArticleTask implements Callable<List<Article>> {
                     .summary(summary)
                     .content(content)
                     .url(url)
-                    .createTime(LocalDateTime.now())
                     .build();
             articleList.add(article);
         });
@@ -147,7 +146,6 @@ public class ArticleTask implements Callable<List<Article>> {
                     .content(content)
                     .url(url)
                     .publishDate(publishDate)
-                    .createTime(LocalDateTime.now())
                     .tagList(articleTags)
                     .build();
             articleList.add(article);

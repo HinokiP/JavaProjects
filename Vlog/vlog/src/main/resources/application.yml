@@ -28,3 +28,23 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true  # mybatis开启驼峰式命名
+
+#pagehelper分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  row-bounds-with-count: true
+  page-size-zero: true
+# 分页插件参数介绍：
+# helper-dialect：分页插件会自动检测当前的数据库链接，自动选择合适的分页方式
+# reasonable：分页合理化参数，默认值为false
+# 当该参数为true时，pageNum<=0时会查询第一页，pageNum>pages(超过总数时)会查询最后一页。默认为false时，直接根据参数进行查询
+# params：为了支持startPage(Object params)方法，增加了该参数来配置参数映射，用于从对象中根据属性名取值，
+# 可以配置pageNum,pageSize,count,PageSizeZero,reasonable,不配置映射的用默认值，
+# 默认值为pageNum=pageNum;pageSize=pageSize;count=countSql;reasonable=reasonable;pageSizeZero=pageSizeZero
+# supportMethodsArguments：支持通过Mapper接口参数来传递分页参数，默认值false，分页插件会从插件方法的参数值中，
+# 自动根据上面params配置的字段中取值，查找到合适的值就会自动分页
+# pageSizeZero：默认值为false，当该参数设置为true时，如果pageSize=0或者RowBounds.limit=0就会查询出全部的结果
+# (相当于没有执行分页查询，但是返回结果仍然是Page类型)，若不设置，pageSize=0也会返回全部

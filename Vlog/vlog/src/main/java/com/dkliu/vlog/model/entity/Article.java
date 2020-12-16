@@ -30,6 +30,5 @@ public class Article {
     private String content;
     private String url;
     private LocalDate publishDate;
-    private LocalDateTime createTime;
     private List<ArticleTag> tagList;
 }

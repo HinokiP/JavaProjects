@@ -6,6 +6,9 @@ import com.dkliu.vlog.model.entity.Article;
 import com.dkliu.vlog.model.entity.ArticleTag;
 import com.dkliu.vlog.service.ArticleService;
 import com.dkliu.vlog.task.ArticleTask;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +41,14 @@ public class ArticleServiceImpl implements ArticleService {
         });
     }
 
+
     @Override
-    public List<Article> selectAll() {
-        List<Article> articles = articleMapper.selectAll();
-        articles.forEach(article -> {
-            List<ArticleTag> articleTags = articleTagMapper.selectByArticleId(article.getId());
-            article.setTagList(articleTags);
-        });
-        return articles;
+    public PageInfo<Article> selectByPage(int pageNum, int pageSize, int userId) {
+        //将参数传给这个方法就可以实现物理分页
+        PageHelper.startPage(pageNum, pageSize);
+        //先根据用户id查到所有数据
+        Page<Article> articlePage = articleMapper.selectAll(userId);
+        //将这些数据作为入参构建出PageInfo(包含了总页数，当前页码、每页数量、当前页数据list等等一堆属性和方法)
+        return new PageInfo<>(articlePage);
     }
 }
