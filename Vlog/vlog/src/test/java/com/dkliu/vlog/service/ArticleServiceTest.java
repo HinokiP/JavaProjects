@@ -46,4 +46,16 @@ class ArticleServiceTest {
         PageInfo<Article> articlePageInfo = articleService.selectByPage(1, 9, 1);
         System.out.println(articlePageInfo.getList().size());
     }
+
+    @Test
+    void getRecommendArticles() {
+        List<Article> recommendArticles = articleService.getRecommendArticles(1);
+        recommendArticles.forEach(System.out::println);
+    }
+
+    @Test
+    void getDetail() {
+        Article detail = articleService.getDetail("01f0e388e74e48258a7afb55faaa5c3e");
+        System.out.println(detail);
+    }
 }

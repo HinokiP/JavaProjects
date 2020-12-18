@@ -41,6 +41,10 @@ public class ArticleServiceImpl implements ArticleService {
         });
     }
 
+    @Override
+    public List<Article> getRecommendArticles(int userId) {
+        return articleMapper.getRecommendArticles(userId);
+    }
 
     @Override
     public PageInfo<Article> selectByPage(int pageNum, int pageSize, int userId) {
@@ -50,5 +54,10 @@ public class ArticleServiceImpl implements ArticleService {
         Page<Article> articlePage = articleMapper.selectAll(userId);
         //将这些数据作为入参构建出PageInfo(包含了总页数，当前页码、每页数量、当前页数据list等等一堆属性和方法)
         return new PageInfo<>(articlePage);
+    }
+
+    @Override
+    public Article getDetail(String id) {
+        return articleMapper.getDetail(id);
     }
 }

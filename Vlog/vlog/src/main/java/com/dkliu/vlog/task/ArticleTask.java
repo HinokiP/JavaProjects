@@ -1,5 +1,6 @@
 package com.dkliu.vlog.task;
 
+import cn.hutool.core.util.IdUtil;
 import com.dkliu.vlog.model.entity.Article;
 import com.dkliu.vlog.model.entity.ArticleTag;
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +11,13 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -29,56 +32,16 @@ import java.util.concurrent.*;
 @Slf4j
 public class ArticleTask implements Callable<List<Article>> {
     private static final String BASE_URL = "http://godweiyang.com";
-    private Document document = null;
     private List<Article> articleList;
 
     @Override
     public List<Article> call() throws Exception {
         articleList = new ArrayList<>(100);
+        Document document = null;
         //页码
         int index;
-        try {
-            document = Jsoup.connect(BASE_URL).get();
-        } catch (IOException e) {
-            log.error("连接失败");
-        }
-        assert document != null;
-        Element indexCard = document.getElementById("indexCard");
-        //推荐的6篇文章结点
-        Elements recommend = indexCard.select(".col");
-        recommend.forEach(articleNode -> {
-            //id
-            String id = UUID.randomUUID().toString();
-            //category
-            Element categoryNode = articleNode.select(".category").get(0);
-            String category = categoryNode.text();
-            //title
-            Element titleNode = articleNode.select(".post-title").get(0);
-            String title = titleNode.text();
-            //summary
-            Element summaryNode = articleNode.select(".post-description").get(0);
-            String summary = summaryNode.text();
-            //url
-            Element urlNode = articleNode.select(".read-more").get(0);
-            String url = BASE_URL + urlNode.attr("href");
-            //content
-            String content = getContent(url);
-            Article article = Article.builder()
-                    .id(id)
-                    .userId(1)
-                    .title(title)
-                    .category(category)
-                    .cover("http://picsum.photos/1920/1080?random&rand=" + Math.random())
-                    .summary(summary)
-                    .content(content)
-                    .url(url)
-                    .build();
-            articleList.add(article);
-        });
-        //抓取第2页后面的文章数据
         for (index = 2; index < 19; index++) {
             try {
-                //与目标页面建立连接
                 document = Jsoup.connect(BASE_URL + "/page/" + index).get();
             } catch (IOException e) {
                 log.error("连接失败");
@@ -91,7 +54,7 @@ public class ArticleTask implements Callable<List<Article>> {
         return articleList;
     }
 
-    private String getContent(String url) {
+    private String getDetail(String url) {
         Document document = null;
         try {
             document = Jsoup.connect(url).get();
@@ -106,10 +69,13 @@ public class ArticleTask implements Callable<List<Article>> {
     private void parseArticles(Elements articles) {
         for (Element articleNode : articles) {
             //生成文章id
-            String id = UUID.randomUUID().toString();
+            String id = IdUtil.simpleUUID();
             //title
             Element titleSpan = articleNode.select(".card-title").get(0);
             String title = titleSpan.text();
+            //封面图，用随机图片代替了
+            //Element imgNode = articleNode.select(".responsive-img").get(0);
+            //String cover = BASE_URL + imgNode.attr("src");
             //category
             Element categoryNode = articleNode.select(".post-category").get(0);
             String category = categoryNode.html();
@@ -134,7 +100,7 @@ public class ArticleTask implements Callable<List<Article>> {
                 articleTags.add(articleTag);
             }
             //文章内容，需要根据文章的url再次打开文章详情页面爬取，这里封装一个方法调用即可
-            String content = getContent(url);
+            String content = getDetail(url);
 
             Article article = Article.builder()
                     .id(id)
@@ -146,10 +112,39 @@ public class ArticleTask implements Callable<List<Article>> {
                     .content(content)
                     .url(url)
                     .publishDate(publishDate)
+                    .totalWords(getTotalWords())
+                    .duration(getDuration())
+                    .pageView(getPageView())
                     .tagList(articleTags)
                     .build();
             articleList.add(article);
         }
+    }
+
+    private String getTotalWords() {
+        Random random = new Random();
+        int total = random.nextInt(9000) + 1000;
+        DecimalFormat df = new DecimalFormat("0.0");
+        //"2.6k"的形式，保留一位小数
+        return df.format(total / 1000.0) + "k";
+    }
+
+    private int getUserId() {
+        Random random = new Random();
+        //1,2,3
+        return random.nextInt(3) + 1;
+    }
+
+    private int getDuration() {
+        Random random = new Random();
+        //[2,11]
+        return random.nextInt(10) + 2;
+    }
+
+    private int getPageView() {
+        Random random = new Random();
+        //随机四位数
+        return random.nextInt(9000) + 1000;
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -157,6 +152,6 @@ public class ArticleTask implements Callable<List<Article>> {
         ArticleTask at = new ArticleTask();
         Future<List<Article>> future = executor.submit(at);
         List<Article> articles = future.get();
-        articles.forEach(article -> System.out.println(article.getTitle() + "," + article.getCategory()));
+        articles.forEach(article -> System.out.println(article.getTitle() + "," + article.getTotalWords()));
     }
 }
