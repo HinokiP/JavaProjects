@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view v-for="(article, index) in articles" :key="index">
-			<my-card :article="article"></my-card>
+			<my-card :article="article" @open="gotoDetail(article.id)"></my-card>
 		</view>
 	</view>
 </template>
@@ -11,7 +11,7 @@
 	import myCard from '@/components/my-card/my-card.vue'
 	import $C from '@/common/config.js'
 	export default {
-		components:{
+		components: {
 			myCard
 		},
 		data() {
@@ -63,7 +63,7 @@
 				url:$C.webUrl+'/article/page?pageNum='+this.pageNum+'&pageSize='+this.pageSize,
 				method:'POST',
 				header:{
-					userId:2
+					userId: 2
 				},
 				success:(res)=>{
 					setTimeout(()=>{
@@ -95,7 +95,7 @@
 					url:$C.webUrl+'/article/page?pageNum='+this.pageNum+'&pageSize='+this.pageSize,
 					method:'POST',
 					header:{
-						userId:1	//把id改为数量少点的用户
+						userId: 2	//把id改为数量少点的用户
 					},
 					success:(res)=>{
 						//请求结束延时隐藏加载动画
@@ -103,11 +103,17 @@
 							uni.hideLoading();
 						},100);
 						//res.data.data包含了分页的很多信息，list属性才是真正的数据[]
-						console.log(res.data.data.pageSize);
-						console.log(res.data.data.total);
+						// console.log(res.data.data.pageSize);
+						// console.log(res.data.data.total);
 						this.articles = res.data.data.list
 					}
 				});
+			},
+			gotoDetail(id) {
+				console.log('文章id' + id);
+				uni.navigateTo({
+					url: '../article-detail/article-detail?id=' + id
+				})
 			}
 		}
 	};

@@ -1,5 +1,5 @@
 <template>
-	<view class="my-card" @click="onClick">
+	<view class="my-card" @click="open">
 		<view class="thumb">
 			<image :src="article.cover" class="img" mode="aspectFill"></image>
 			<view class="category">{{ article.category }}</view>
@@ -33,9 +33,9 @@
 			}
 		},
 		methods: {
-			onClick() {
+			open() {
 				//在子组件my-card.vue中将点击事件传回父组件index.vue
-				this.$emit('click');
+				this.$emit('open');
 			}
 		}
 	}
