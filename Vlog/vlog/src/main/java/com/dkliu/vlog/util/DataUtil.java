@@ -2,8 +2,10 @@ package com.dkliu.vlog.util;
 
 import com.dkliu.vlog.model.Card;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @ClassName DataUtil
@@ -47,5 +49,25 @@ public class DataUtil {
                         .build()
         };
         return Arrays.asList(cards);
+    }
+
+    public static int getDuration() {
+        Random random = new Random();
+        //[2,11]
+        return random.nextInt(10) + 2;
+    }
+
+    public static int getPageView() {
+        Random random = new Random();
+        //随机四位数
+        return random.nextInt(9000) + 1000;
+    }
+
+    public static String getTotalWords() {
+        Random random = new Random();
+        int total = random.nextInt(9000) + 1000;
+        DecimalFormat df = new DecimalFormat("0.0");
+        //"2.6k"的形式，保留一位小数
+        return df.format(total / 1000.0) + "k";
     }
 }

@@ -5,7 +5,7 @@ import com.dkliu.vlog.mapper.ArticleTagMapper;
 import com.dkliu.vlog.model.entity.Article;
 import com.dkliu.vlog.model.entity.ArticleTag;
 import com.dkliu.vlog.service.ArticleService;
-import com.dkliu.vlog.task.ArticleTask;
+import com.dkliu.vlog.util.DataUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -32,9 +33,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void insertArticles(List<Article> articles) {
+        //批量插入文章
         articleMapper.insertArticles(articles);
         assert articles != null;
         articles.forEach(article -> {
+            //如果文章有标签，就批量插入文章标签
             if (article.getTagList() != null) {
                 articleTagMapper.insertArticleTags(article.getTagList());
             }
@@ -59,5 +62,22 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article getDetail(String id) {
         return articleMapper.getDetail(id);
+    }
+
+    @Override
+    public Article postArticle(Article article) {
+        article.setCover("https://picsum.photos/1920/1080?random&rand=" + Math.random());
+        article.setPublishDate(LocalDate.now());
+        article.setTotalWords(DataUtil.getTotalWords());
+        article.setDuration(DataUtil.getDuration());
+        article.setPageView(DataUtil.getPageView());
+        System.out.println(article);
+        //新增文章
+        articleMapper.add(article);
+        //获得文章的标签列表
+        List<ArticleTag> tagList = article.getTagList();
+        //批量插入标签
+        articleTagMapper.insertArticleTags(tagList);
+        return article;
     }
 }
