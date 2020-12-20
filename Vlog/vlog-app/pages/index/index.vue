@@ -28,6 +28,11 @@
 				user:state=>state.user
 			})
 		},
+		onNavigationBarButtonTap() {
+			uni.navigateTo({
+				url: '../write/write'
+			});
+		},
 		onLoad() {
 			uni.getSystemInfo({
 				success:res=>{
@@ -63,7 +68,7 @@
 				url:$C.webUrl+'/article/page?pageNum='+this.pageNum+'&pageSize='+this.pageSize,
 				method:'POST',
 				header:{
-					userId: 2
+					userId: this.user.id
 				},
 				success:(res)=>{
 					setTimeout(()=>{
@@ -95,7 +100,7 @@
 					url:$C.webUrl+'/article/page?pageNum='+this.pageNum+'&pageSize='+this.pageSize,
 					method:'POST',
 					header:{
-						userId: 2	//把id改为数量少点的用户
+						userId: this.user.id	//把id改为数量少点的用户
 					},
 					success:(res)=>{
 						//请求结束延时隐藏加载动画
