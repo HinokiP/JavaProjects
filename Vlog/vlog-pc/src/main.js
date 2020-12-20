@@ -15,6 +15,13 @@ Vue.prototype.$layer = layer(Vue, {
   msgtime: 3,//目前只有一项，即msg方法的默认消失时间，单位：秒
 });
 
+//引入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor);
+
 new Vue({
   router,
   store,

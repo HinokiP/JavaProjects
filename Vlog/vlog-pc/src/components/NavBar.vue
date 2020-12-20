@@ -78,6 +78,11 @@ export default {
                 icon: 'mdi-account',
                 text: '我的',
                 path: '/my'
+            },
+            {
+                icon: 'mdi-pen',
+                text: '写文章',
+                path: '/write'
             }
         ]
     }),
