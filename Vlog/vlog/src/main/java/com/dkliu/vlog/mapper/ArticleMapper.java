@@ -1,15 +1,11 @@
 package com.dkliu.vlog.mapper;
 
-import cn.hutool.db.meta.Column;
 import com.dkliu.vlog.model.entity.Article;
 import com.dkliu.vlog.model.vo.ArticleVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.executor.ResultExtractor;
 
-import javax.annotation.Resource;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @ClassName ArticleTagMapper
@@ -92,20 +88,24 @@ public interface ArticleMapper {
      * @param id 文章id
      * @return Article
      */
-    @Select("SELECT * FROM t_article WHERE id = #{id}")
+    @Select("SELECT a.*,b.nickname,b.avatar FROM t_article a LEFT JOIN t_user b ON a.user_id = b.id WHERE a.id = #{id}")
     @Results({
-            @Result(id = true, property = "id", column="id"),
+            @Result(id = true, property = "id", column = "id"),
             @Result(property = "category", column = "category"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "title", column = "title"),
             @Result(property = "cover", column = "cover"),
             @Result(property = "content", column = "content"),
-            @Result(property = "publishDate", column = "publish_date"),
+            @Result(property = "createTime", column = "create_time"),
             @Result(property = "totalWords", column = "total_words"),
             @Result(property = "duration", column = "duration"),
             @Result(property = "pageView", column = "page_view"),
             @Result(property = "tagList", column = "id",
-                    many = @Many(select = "com.dkliu.vlog.mapper.ArticleTagMapper.selectByArticleId"))
+                    many = @Many(select = "com.dkliu.vlog.mapper.ArticleTagMapper.selectByArticleId")),
+            @Result(property = "commentList", column = "id",
+                    many = @Many(select = "com.dkliu.vlog.mapper.CommentMapper.selectByArticleId")),
+            @Result(property = "nickname", column = "nickname"),
+            @Result(property = "avatar", column = "avatar")
     })
-    Article getDetail(@Param(value = "id") String id);
+    ArticleVo getDetail(@Param(value = "id") String id);
 }

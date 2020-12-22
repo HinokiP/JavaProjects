@@ -20,15 +20,15 @@
       <v-col cols="12" md="6" v-for="(article, index) in indexList" :key="index">
           <v-hover v-slot="{ hover }">
             <v-card
-              class="rounded-lg mask"
+              class="rounded-lg"
               height="500"
               link
               :elevation="hover ? 12 : 2"
               :class="{ 'on-hover': hover }">
                 <v-img class="white--text" :src="article.cover" height="100%" style="text-align:center;">
-                    <h1 class="mt-12 mask pa-6">{{ article.title }}</h1>
-                    <p class="text-md-h6 light-grey--text pa-2 mask display-3 text-left">{{ article.summary }}</p>
-                    <v-row class="px-12 mask" align="center" @click="gotoProfile(article.userId)">
+                    <h1 class="mt-12 pa-6" style="background-color: rgba(0, 0, 0, 0.2);">{{ article.title }}</h1>
+                    <p class="text-md-h6 light-grey--text pa-2 display-3 text-left" style="background-color: rgba(0, 0, 0, 0.2);">{{ article.summary }}</p>
+                    <v-row class="px-12" align="center" style="background-color: rgba(0, 0, 0, 0.2);" @click="gotoProfile(article.userId)">
                       <v-avatar>
                         <img :src="article.avatar" />
                       </v-avatar>
@@ -48,7 +48,7 @@
           <v-hover v-slot="{ hover }">
             <v-card class="rounded-lg" height="650" link :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
             <v-img class="white--text align-end" :src="article.cover" height="50%">
-              <h2 class="px-3 mb-6 mask">{{ article.title }}</h2>
+              <h2 class="px-3 mb-6 " style="background-color: rgba(0, 0, 0, 0.2);">{{ article.title }}</h2>
             </v-img>
             <v-card-text class="text--primary">
               <div class="grey--text text-md-h6 display">{{ article.summary }}</div>
@@ -155,9 +155,9 @@ export default {
       }).then((res) => {
         console.log(res.data.data);
         this.indexList = res.data.data
-        this.indexList.forEach((element) => {
-          this.slides.push(element.cover)
-        })
+        // this.indexList.forEach((element) => {
+        //   this.slides.push(element.cover)
+        // })
       })
     },
     getData() {
@@ -173,9 +173,9 @@ export default {
         this.articles = res.data.data.list
         this.pages = res.data.data.pages
         this.indexList = this.articles.slice(0, 6)
-        this.indexList.forEach((element) => {
-          this.slides.push(element.cover)
-        })
+        // this.indexList.forEach((element) => {
+        //   this.slides.push(element.cover)
+        // })
       })
     },
     next() {
@@ -246,9 +246,6 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-}
-.mask {
-  background-color: rgba(0, 0, 0, 0.2);
 }
 //卡片悬停
 .v-card {

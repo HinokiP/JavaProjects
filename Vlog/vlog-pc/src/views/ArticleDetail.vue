@@ -41,12 +41,12 @@
                       <v-icon class="mr-1">
                           mdi-calendar
                       </v-icon>
-                      <span class="text-md-h6 font-weight-medium mr-3">发布日期：{{ article.publishDate }}</span>
+                      <span class="text-md-h6 font-weight-medium mr-3">发布日期：{{ article.createTime }}</span>
                       <!-- 作者 -->
                       <v-icon class="mr-1">
                           mdi-account
                       </v-icon>
-                      <span class="text-md-h6 font-weight-medium mr-3">作者：{{ loginUser.nickname }}</span>
+                      <span class="text-md-h6 font-weight-medium mr-3">作者：{{ article.nickname }}</span>
                       <!-- 文章字数 -->
                       <v-icon class="mr-1">
                           mdi-file
@@ -67,6 +67,39 @@
                   <v-divider></v-divider>
                   <!-- 文章内容 -->
                   <div class="pa-6" v-html="article.content"></div>
+
+                  <v-divider class="mt-6"></v-divider>
+                  
+                  <!-- 文章评论 -->
+                  <v-card
+                    class="mx-auto my-2"
+                    color="grey lighten-5"
+                    dark
+                    v-for="(comment, index) in article.commentList"
+                    :key="index">
+                        <v-card-title class="heading font-weight-bold grey--text">
+                            {{ comment.content }}
+                        </v-card-title>
+                        <v-card-actions>
+                            <v-list-item class="grow">
+                                <v-list-item-avatar color="grey darken-3">
+                                    <v-img class="elevation-6" :src="comment.avatar"></v-img>
+                                </v-list-item-avatar>
+                                <v-list-item-content class="grey--text">
+                                    <v-list-item-title>{{ comment.nickname }}</v-list-item-title>
+                                </v-list-item-content>
+
+                                <v-row align="center" justify="end" class="grey--text">
+                                    <span class="subheading mr-2">{{ comment.createTime }}</span>
+                                </v-row>
+                            </v-list-item>
+                        </v-card-actions>
+                  </v-card>
+
+                  <v-divider class="mt-6"></v-divider>
+
+                  <!-- 添加评论 -->
+                  <comment @onClick="submit"></comment>
               </v-col>
 
               <v-col cols="12" md="4" class="pa-12">
@@ -90,6 +123,7 @@
 import { mapState } from 'vuex'
 import MyFooter from '../components/MyFooter.vue'
 import NavBar from '../components/NavBar.vue'
+import Comment from '../components/Comment.vue'
 export default {
     data: () => ({
         article: {},
@@ -97,7 +131,8 @@ export default {
     }),
     components: { 
       MyFooter,
-      NavBar
+      NavBar,
+      Comment
     },
     computed: {
         ...mapState({
@@ -132,7 +167,24 @@ export default {
             })
         })
     },
-    methods: {}
+    methods: {
+        submit(content) {
+            alert(content)
+            let data = {
+                articleId: this.article.id,
+                userId: this.loginUser.id,
+                content: content
+            }
+            this.axios({
+                method: 'POST',
+                url: '/comment/add',
+                data: data
+            }).then((res) => {
+                console.log(res.data.data);
+                this.article.commentList = res.data.data
+            })
+        }
+    }
 }
 </script>
 

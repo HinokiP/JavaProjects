@@ -25,10 +25,10 @@ public interface ArticleService {
     /**
      * 查询推荐的6篇文章
      *
-     * @param userId 用户id
+     //* @param userId 用户id
      * @return List<Article>
      */
-    List<ArticleVo> getRecommendArticles(@Param(value = "userId") int userId);
+    List<ArticleVo> getRecommendArticles();
 
     /**
      * 根据用户id查找数并分页
@@ -47,7 +47,7 @@ public interface ArticleService {
      * @param id 文章id
      * @return Article详情
      */
-    Article getDetail(@Param(value = "id") String id);
+    ArticleVo getDetail(@Param(value = "id") String id);
 
     /**
      * 发布文章

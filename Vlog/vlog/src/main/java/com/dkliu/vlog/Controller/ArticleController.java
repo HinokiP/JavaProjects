@@ -42,7 +42,7 @@ public class ArticleController {
 
     @GetMapping("recommend")
     public List<ArticleVo> getRecommend() {
-        List<ArticleVo> recommendArticles = articleService.getRecommendArticles(getUserId());
+        List<ArticleVo> recommendArticles = articleService.getRecommendArticles();
         if (recommendArticles == null) {
             throw new NullPointerException();
         }
@@ -50,8 +50,8 @@ public class ArticleController {
     }
 
     @GetMapping("{id}")
-    public Article getArticleDetail(@PathVariable String id) {
-        Article detail = articleService.getDetail(id);
+    public ArticleVo getArticleDetail(@PathVariable String id) {
+        ArticleVo detail = articleService.getDetail(id);
         if (detail == null) {
             throw new NullPointerException();
         }

@@ -1,6 +1,7 @@
 package com.dkliu.vlog.model.vo;
 
 import com.dkliu.vlog.model.entity.Article;
+import com.dkliu.vlog.model.entity.ArticleTag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,8 @@ public class ArticleVo {
     private String totalWords;
     private Integer duration;
     private Integer pageView;
-    private List<Article> tagList;
+    private List<ArticleTag> tagList;
+    private List<CommentVo> commentList;
     private String nickname;
     private String avatar;
 }

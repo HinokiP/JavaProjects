@@ -51,13 +51,13 @@ class ArticleServiceTest {
 
     @Test
     void getRecommendArticles() {
-        List<ArticleVo> recommendArticles = articleService.getRecommendArticles(1);
+        List<ArticleVo> recommendArticles = articleService.getRecommendArticles();
         recommendArticles.forEach(System.out::println);
     }
 
     @Test
     void getDetail() {
-        Article detail = articleService.getDetail("01f0e388e74e48258a7afb55faaa5c3e");
+        ArticleVo detail = articleService.getDetail("01f0e388e74e48258a7afb55faaa5c3e");
         System.out.println(detail);
     }
 }
