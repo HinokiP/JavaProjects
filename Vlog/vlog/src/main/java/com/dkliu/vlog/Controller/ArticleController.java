@@ -2,6 +2,7 @@ package com.dkliu.vlog.Controller;
 
 import com.dkliu.vlog.common.ResponseResult;
 import com.dkliu.vlog.model.entity.Article;
+import com.dkliu.vlog.model.vo.ArticleVo;
 import com.dkliu.vlog.service.ArticleService;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,10 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping("page")
-    public PageInfo<Article> getArticleByPage(@RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNum,
+    public PageInfo<ArticleVo> getArticleByPage(@RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNum,
                                               @RequestParam(name = "pageSize", defaultValue = "9", required = false) int pageSize) {
-        PageInfo<Article> articlePageInfo = articleService.selectByPage(pageNum, pageSize, getUserId());
+        //PageInfo<ArticleVo> articlePageInfo = articleService.selectByPage(pageNum, pageSize, getUserId());
+        PageInfo<ArticleVo> articlePageInfo = articleService.selectByPage(pageNum, pageSize);
         if (articlePageInfo == null) {
             throw new NullPointerException();
         }
@@ -39,8 +41,8 @@ public class ArticleController {
     }
 
     @GetMapping("recommend")
-    public List<Article> getRecommend() {
-        List<Article> recommendArticles = articleService.getRecommendArticles(getUserId());
+    public List<ArticleVo> getRecommend() {
+        List<ArticleVo> recommendArticles = articleService.getRecommendArticles(getUserId());
         if (recommendArticles == null) {
             throw new NullPointerException();
         }

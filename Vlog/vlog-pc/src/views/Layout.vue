@@ -2,12 +2,15 @@
   <v-app>
     <nav-bar></nav-bar>
     <v-card>
-      <v-app-bar
-        color="#FCB69F" clipped-left dark height="500"
-        src="https://pic-go-hinoki.oss-cn-beijing.aliyuncs.com/img/8.jpg">
+      <v-app-bar color="#FCB69F" clipped-left dark height="500" :src="user.banner">
         <template v-slot:img="{ props }">
             <v-img v-bind="props" gradient="to top right, rgba(40,44,52,.6), rgba(211,190,233,.4)"></v-img>
-        </template>        
+        </template>    
+        <v-row justify="center">
+          <v-card-title>
+            <h1>{{ user.signature }}</h1>
+          </v-card-title>
+        </v-row>    
       </v-app-bar>
     </v-card>
 
@@ -35,6 +38,7 @@ export default {
   computed: {
     ...mapState({
       loginStatus: (state) => state.loginStatus,
+      loginUser: (state) => state.loginUser,
       user: (state) => state.user
     })
   }

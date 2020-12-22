@@ -2,6 +2,7 @@ package com.dkliu.vlog.mapper;
 
 import com.dkliu.vlog.VlogApiApplication;
 import com.dkliu.vlog.model.entity.Article;
+import com.dkliu.vlog.model.vo.ArticleVo;
 import com.dkliu.vlog.task.ArticleTask;
 import com.github.pagehelper.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ class ArticleMapperTest {
 
     @Test
     void selectAll() {
-        Page<Article> articlePage = articleMapper.selectAll(1);
+        Page<ArticleVo> articlePage = articleMapper.selectAll();
         System.out.println(articlePage.toPageInfo().getList().size());
     }
 }

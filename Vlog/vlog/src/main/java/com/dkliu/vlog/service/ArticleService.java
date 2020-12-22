@@ -1,6 +1,7 @@
 package com.dkliu.vlog.service;
 
 import com.dkliu.vlog.model.entity.Article;
+import com.dkliu.vlog.model.vo.ArticleVo;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,17 +28,18 @@ public interface ArticleService {
      * @param userId 用户id
      * @return List<Article>
      */
-    List<Article> getRecommendArticles(@Param(value = "userId") int userId);
+    List<ArticleVo> getRecommendArticles(@Param(value = "userId") int userId);
 
     /**
      * 根据用户id查找数并分页
      *
      * @param pageNum 页码
      * @param pageSize 每页数量
-     * @param userId 用户id
+     //* @param userId 用户id
      * @return 返回结果
      */
-    PageInfo<Article> selectByPage(int pageNum, int pageSize, int userId);
+    //PageInfo<ArticleVo> selectByPage(int pageNum, int pageSize, int userId);
+    PageInfo<ArticleVo> selectByPage(int pageNum, int pageSize);
 
     /**
      * 根据文章id查找文章详情

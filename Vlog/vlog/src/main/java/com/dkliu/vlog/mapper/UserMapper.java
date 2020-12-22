@@ -66,4 +66,13 @@ public interface UserMapper {
              "</when> ",
              "</script>"})
     User fineUserByOpenId(@Param("wxOpenId") String wxOpenId) throws SQLException;
+
+    /**
+     * 根据id获取用户信息
+     *
+     * @param id id
+     * @return User
+     */
+    @Select("SELECT id,phone,nickname,avatar,gender,address,birthday,banner,signature FROM t_user WHERE id=#{id} ")
+    User getUser(@Param("id") int id);
 }

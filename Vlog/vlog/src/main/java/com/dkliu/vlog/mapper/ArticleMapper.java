@@ -2,6 +2,7 @@ package com.dkliu.vlog.mapper;
 
 import cn.hutool.db.meta.Column;
 import com.dkliu.vlog.model.entity.Article;
+import com.dkliu.vlog.model.vo.ArticleVo;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.executor.ResultExtractor;
@@ -24,8 +25,8 @@ public interface ArticleMapper {
      *
      * @param article 入参
      */
-    @Insert("INSERT INTO t_article (id,category,user_id,title,cover,summary,content,publish_date,total_words,duration,page_view) " +
-    "VALUES (#{article.id}, #{article.category}, #{article.userId}, #{article.title}, #{article.cover}, #{article.summary}, #{article.content}, #{article.publishDate}, #{article.totalWords}, #{article.duration}, #{article.pageView})")
+    @Insert("INSERT INTO t_article (id,category,user_id,title,cover,summary,content,create_time,total_words,duration,page_view) " +
+    "VALUES (#{article.id}, #{article.category}, #{article.userId}, #{article.title}, #{article.cover}, #{article.summary}, #{article.content}, #{article.createTime}, #{article.totalWords}, #{article.duration}, #{article.pageView})")
     void add(@Param("article") Article article);
 
     /**
@@ -36,10 +37,10 @@ public interface ArticleMapper {
      */
     @Insert({
             "<script>",
-            "INSERT INTO t_article (id,category,user_id,title,cover,summary,content,url,publish_date,total_words,duration,page_view) VALUES ",
+            "INSERT INTO t_article (id,category,user_id,title,cover,summary,content,url,create_time,total_words,duration,page_view) VALUES ",
             "<foreach collection='articleList' item='item' index='index' separator=','>",
             "(#{item.id}, #{item.category}, #{item.userId}, #{item.title}, #{item.cover}, #{item.summary}, #{item.content}," +
-                    "#{item.url}, #{item.publishDate}, #{item.totalWords}, #{item.duration}, #{item.pageView})",
+                    "#{item.url}, #{item.createTime}, #{item.totalWords}, #{item.duration}, #{item.pageView})",
             "</foreach>",
             "</script>"
     })
@@ -48,19 +49,15 @@ public interface ArticleMapper {
     /**
      * 查询某个用户的6篇推荐文章
      *
-     * @param userId 用户id
      * @return List<Article>
      */
-    @Select("SELECT id,category,user_id,title,cover,summary FROM t_article WHERE user_id=#{userId} ORDER BY page_view DESC LIMIT 6 ")
-    @Results({
-            @Result(id = true, property = "id", column = "id"),
-            @Result(property = "category", column = "category"),
-            @Result(property = "userId", column = "user_id"),
-            @Result(property = "title", column = "title"),
-            @Result(property = "cover", column = "cover"),
-            @Result(property = "summary", column = "summary")
-    })
-    List<Article> getRecommendArticles(@Param(value = "userId") int userId);
+    @Select("SELECT a.id,a.category,a.user_id,a.title,a.cover,a.summary,b.nickname,b.avatar " +
+            "FROM t_article a " +
+            "LEFT JOIN t_user b " +
+            "ON a.user_id = b.id " +
+            "ORDER BY a.page_view DESC " +
+            "LIMIT 6 ")
+    List<ArticleVo> getRecommendArticles();
 
     /**
      * 查询用户的所有文章，一对多关联查询，“一方”（文章）需要存放“多方”（文章标签）的集合，双向一对多就是多对多了
@@ -68,10 +65,12 @@ public interface ArticleMapper {
      * column是文章表中的文章id，也就是一对多查询的依据
      * many为在”多方“mapper中的查询方法（务必对应）
      *
-     * @param userId 用户ID
      * @return 文章集合
      */
-    @Select("SELECT id,category,user_id,title,cover,summary,publish_date FROM t_article a WHERE a.user_id = #{userId} ORDER BY publish_date DESC ")
+    @Select("SELECT a.id,a.category,a.user_id,a.title,a.cover,a.summary,a.create_time,b.nickname,b.avatar " +
+            "FROM t_article a " +
+            "LEFT JOIN t_user b ON a.user_id = b.id " +
+            "ORDER BY a.create_time DESC")
     @Results({
             @Result(id = true, property = "id", column = "id"),
             @Result(property = "category", column = "category"),
@@ -79,11 +78,13 @@ public interface ArticleMapper {
             @Result(property = "title", column = "title"),
             @Result(property = "cover", column = "cover"),
             @Result(property = "summary", column = "summary"),
-            @Result(property = "publishDate", column = "publish_date"),
+            @Result(property = "createTime", column = "create_time"),
             @Result(property = "tagList", column = "id",
-                    many = @Many(select = "com.dkliu.vlog.mapper.ArticleTagMapper.selectByArticleId"))
+                    many = @Many(select = "com.dkliu.vlog.mapper.ArticleTagMapper.selectByArticleId")),
+            @Result(property = "nickname", column = "nickname"),
+            @Result(property = "avatar", column = "avatar")
     })
-    Page<Article> selectAll(@Param(value = "userId") int userId);
+    Page<ArticleVo> selectAll();
 
     /**
      * 根据文章id查找文章详情

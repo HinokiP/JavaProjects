@@ -2,6 +2,7 @@ package com.dkliu.vlog.service;
 
 import com.dkliu.vlog.VlogApiApplication;
 import com.dkliu.vlog.model.entity.Article;
+import com.dkliu.vlog.model.vo.ArticleVo;
 import com.dkliu.vlog.task.ArticleTask;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +44,14 @@ class ArticleServiceTest {
 
     @Test
     void selectByPage() {
-        PageInfo<Article> articlePageInfo = articleService.selectByPage(1, 9, 1);
+        //PageInfo<ArticleVo> articlePageInfo = articleService.selectByPage(1, 9, 1);
+        PageInfo<ArticleVo> articlePageInfo = articleService.selectByPage(1, 9);
         System.out.println(articlePageInfo.getList().size());
     }
 
     @Test
     void getRecommendArticles() {
-        List<Article> recommendArticles = articleService.getRecommendArticles(1);
+        List<ArticleVo> recommendArticles = articleService.getRecommendArticles(1);
         recommendArticles.forEach(System.out::println);
     }
 

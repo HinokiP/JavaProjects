@@ -2,12 +2,12 @@
   <v-card min-width="320">
       <v-img :src="imgSrc" height="300px" class="px-3 py-3" dark ref="img">
           <input type="file" @change="change" ref="input" style="display:none" />
-          <v-btn dark icon @click="handleClick">
+          <v-btn dark icon @click="handleClick" v-if="user.id === loginUser.id">
               <v-icon large>mdi-camera</v-icon>
           </v-btn>
       </v-img>
       <v-row class="mt-4">
-          <v-btn class="mx-2" fab dark color="cyan" @click="uploadAvatar">
+          <v-btn class="mx-2" fab dark color="cyan" @click="uploadAvatar" v-if="user.id === loginUser.id">
               <v-icon dark>
                   mdi-upload
               </v-icon>
@@ -121,6 +121,7 @@ export default {
     computed: {
         ...mapState({
             loginStatus: (state) => state.loginStatus,
+            loginUser: (state) => state.loginUser,
             user: (state) => state.user
         }),
         //头像计算属性

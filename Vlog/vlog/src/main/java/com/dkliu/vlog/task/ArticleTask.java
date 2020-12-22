@@ -3,6 +3,8 @@ package com.dkliu.vlog.task;
 import cn.hutool.core.util.IdUtil;
 import com.dkliu.vlog.model.entity.Article;
 import com.dkliu.vlog.model.entity.ArticleTag;
+import com.dkliu.vlog.model.vo.ArticleVo;
+import com.dkliu.vlog.util.DataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -104,47 +106,21 @@ public class ArticleTask implements Callable<List<Article>> {
 
             Article article = Article.builder()
                     .id(id)
-                    .userId(1)
+                    .userId(DataUtil.getUserId())
                     .title(title)
                     .category(category)
                     .cover("http://picsum.photos/1920/1080?random&rand=" + Math.random())
                     .summary(summary)
                     .content(content)
                     .url(url)
-                    .publishDate(publishDate)
-                    .totalWords(getTotalWords())
-                    .duration(getDuration())
-                    .pageView(getPageView())
+                    .createTime(DataUtil.getRandomLocalDateTime(-1000, 1))
+                    .totalWords(DataUtil.getTotalWords())
+                    .duration(DataUtil.getDuration())
+                    .pageView(DataUtil.getPageView())
                     .tagList(articleTags)
                     .build();
             articleList.add(article);
         }
-    }
-
-    private String getTotalWords() {
-        Random random = new Random();
-        int total = random.nextInt(9000) + 1000;
-        DecimalFormat df = new DecimalFormat("0.0");
-        //"2.6k"的形式，保留一位小数
-        return df.format(total / 1000.0) + "k";
-    }
-
-    private int getUserId() {
-        Random random = new Random();
-        //1,2,3
-        return random.nextInt(3) + 1;
-    }
-
-    private int getDuration() {
-        Random random = new Random();
-        //[2,11]
-        return random.nextInt(10) + 2;
-    }
-
-    private int getPageView() {
-        Random random = new Random();
-        //随机四位数
-        return random.nextInt(9000) + 1000;
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {

@@ -46,7 +46,7 @@
                       <v-icon class="mr-1">
                           mdi-account
                       </v-icon>
-                      <span class="text-md-h6 font-weight-medium mr-3">作者：{{ user.nickname }}</span>
+                      <span class="text-md-h6 font-weight-medium mr-3">作者：{{ loginUser.nickname }}</span>
                       <!-- 文章字数 -->
                       <v-icon class="mr-1">
                           mdi-file
@@ -102,7 +102,7 @@ export default {
     computed: {
         ...mapState({
             loginStatus: (state) => state.loginStatus,
-            user: (state) => state.user
+            loginUser: (state) => state.loginUser
         })
     },
     created() {

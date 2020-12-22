@@ -1,26 +1,27 @@
-package com.dkliu.vlog.model.entity;
+package com.dkliu.vlog.model.vo;
 
+import com.dkliu.vlog.model.entity.Article;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @ClassName Article
+ * @ClassName ArticleVo
  * @Description TODO
  * @Author Hinoki
- * @Date 2020/12/15
+ * @Date 2020/12/21
  **/
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class Article {
+public class ArticleVo {
     private String id;
     private String category;
     private Integer userId;
@@ -29,9 +30,12 @@ public class Article {
     private String summary;
     private String content;
     private String url;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime createTime;
     private String totalWords;
     private Integer duration;
     private Integer pageView;
-    private List<ArticleTag> tagList;
+    private List<Article> tagList;
+    private String nickname;
+    private String avatar;
 }
