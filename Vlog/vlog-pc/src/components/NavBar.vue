@@ -77,7 +77,7 @@ export default {
             {
                 icon: 'mdi-account',
                 text: '我的',
-                path: '/my/1'
+                path: '/my'
             },
             {
                 icon: 'mdi-pen',
@@ -89,7 +89,7 @@ export default {
     computed: {
         ...mapState({
             loginStatus: (state) => state.loginStatus,
-            loginUser: (state) => state.loginUser
+            loginUser: (state) => state.loginUser,
         })
     },
     mounted() {
@@ -108,6 +108,9 @@ export default {
             this.$store.commit('logout')
             this.$router.push('/login')
         }
+    },
+    created(){
+        this.items[5].path = '/my/' + this.loginUser.id
     }
 }
 </script>
